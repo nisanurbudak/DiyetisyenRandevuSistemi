@@ -1,0 +1,38 @@
+﻿@model DiyetisyenRandevuSistemi.Models.User
+@{
+    ViewData["Title"] = "Profil Düzenle";
+}
+
+<h2>Profil Bilgilerini Güncelle</h2>
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">@ViewBag.Success</div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form asp-action="EditProfile" method="post">
+    <div class="form-group">
+        <label>Ad Soyad</label>
+        <input type="text" class="form-control" name="Name" value="@Model.Name" required />
+    </div>
+
+    <hr />
+    <h5>Şifre Güncelle</h5>
+
+    <div class="form-group">
+        <label>Mevcut Şifreniz</label>
+        <input type="password" class="form-control" name="CurrentPassword" placeholder="Mevcut şifrenizi girin" />
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Yeni Şifre (İsteğe bağlı)</label>
+        <input type="password" class="form-control" name="NewPassword" placeholder="Yeni şifre (isteğe bağlı)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-4">Kaydet</button>
+    <a asp-action="Profile" class="btn btn-secondary mt-4 ms-2">Geri Dön</a>
+</form>

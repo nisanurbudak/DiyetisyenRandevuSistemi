@@ -1,0 +1,15 @@
+﻿@model DiyetisyenRandevuSistemi.Models.User
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<h2>Profil Bilgileriniz</h2>
+
+<div class="card p-3">
+    <p><strong>Ad Soyad:</strong> @Model.Name</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+</div>
+
+<form asp-controller="Account" asp-action="Logout" method="post">
+    <button class="btn btn-danger mt-3" type="submit">Çıkış Yap</button>
+</form>

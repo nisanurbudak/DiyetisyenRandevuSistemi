@@ -1,0 +1,99 @@
+﻿@model IEnumerable<DiyetisyenRandevuSistemi.Models.Paket>
+@{
+    ViewData["Title"] = "Abonelik Yönetimi";
+    Layout = "_AdminLayout";
+}
+
+<h2>Abonelikler</h2>
+
+<table class="table table-bordered" id="paketlerTable">
+    <thead>
+        <tr>
+            <th>Kullanıcı</th>
+            <th>Tip</th>
+            <th>Gün</th>
+            <th>Başlangıç</th>
+            <th>Randevular</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var paket in Model)
+            {
+                if (paket == null) continue;
+                        <tr id="paketRow-@paket.Id">
+                            <td>@(paket.User?.Name ?? "Bilinmiyor")</td>
+                            <td>@paket.Tip.ToString()</td>
+                            <td>
+                        @(paket.Tip == DiyetisyenRandevuSistemi.Models.PaketTipi.Haftalik
+                                ? paket.HaftalikGun.ToString()
+                                : "Her ayın " + paket.AylikGun + ". günü")
+                            </td>
+                            <td>@paket.BaslangicTarihi.ToShortDateString()</td>
+                            <td class="paketDurum">
+                        @{
+                            string durum = "Beklemede";
+                            if (paket.Randevular != null && paket.Randevular.Any())
+                            {
+                                if (paket.Randevular.All(r => r.Durum == DiyetisyenRandevuSistemi.Models.RandevuDurumu.Onaylandi))
+                                    durum = "Onaylandı";
+                                else if (paket.Randevular.All(r => r.Durum == DiyetisyenRandevuSistemi.Models.RandevuDurumu.Reddedildi))
+                                    durum = "Reddedildi";
+                              
+                            }
+                        }
+                        @durum
+                            </td>
+                            <td>
+                                <ul>
+                            @if (paket.Randevular != null && paket.Randevular.Any())
+                            {
+                                foreach (var r in paket.Randevular.OrderBy(r => r.Baslangic))
+                                {
+                                                <li>@r.Baslangic.ToShortDateString() - @r.Baslangic.ToString("HH:mm")</li>
+                                }
+                            }
+                            else
+                            {
+                                        <li>Randevu yok</li>
+                            }
+                                </ul>
+                            </td>
+                            <td>
+                                <button class="btn btn-success btn-sm" onclick="approvePaket(@paket.Id)">Onayla</button>
+                                <button class="btn btn-danger btn-sm" onclick="rejectPaket(@paket.Id)">Reddet</button>
+                            </td>
+                        </tr>
+            }
+        }
+        else
+        {
+                <tr>
+                    <td colspan="7" class="text-center">Hiç abonelik bulunamadı.</td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            function approvePaket(paketId) {
+                $.post('@Url.Action("ApprovePaket", "Admin")', { paketId: paketId }, function () {
+                    // Durumu güncelle
+                    var row = $('#paketRow-' + paketId);
+                    row.find('.paketDurum').text('Onaylandı');
+                });
+            }
+
+            function rejectPaket(paketId) {
+                $.post('@Url.Action("RejectPaket", "Admin")', { paketId: paketId }, function () {
+                    // Satırı kaldır
+                    $('#paketRow-' + paketId).remove();
+                });
+            }
+        </script>
+}

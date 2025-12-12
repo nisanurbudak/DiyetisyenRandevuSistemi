@@ -1,0 +1,29 @@
+﻿@model DiyetisyenRandevuSistemi.Models.User
+@{
+    Layout = "_AdminPanelLayout";
+    ViewData["Title"] = "Kullanıcı Düzenle";
+}
+
+<h2>Kullanıcı Düzenle</h2>
+
+<form asp-action="EditUser" method="post">
+    <input type="hidden" asp-for="Id" />  <!-- Id gizli alan olarak gönderiliyor -->
+
+    <div class="mb-3">
+        <label>Ad Soyad</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" type="email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Şifre</label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a href="@Url.Action("Users")" class="btn btn-secondary">İptal</a>
+</form>

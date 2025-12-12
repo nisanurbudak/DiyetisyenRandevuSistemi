@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DiyetisyenRandevuSistemi.Models.Abonelik>
+
+<h2>Randevularım</h2>
+
+<table class="table">
+    <tr>
+        <th>Hekim</th>
+        <th>Tarih</th>
+        <th>Saat</th>
+        <th>Durum</th>
+        <th>İşlemler</th>
+    </tr>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.Hekim.Adi</td>
+            <td>@r.Baslangic.ToString("dd.MM.yyyy")</td>
+            <td>@r.Baslangic.ToString("HH:mm") - @r.Bitis.ToString("HH:mm")</td>
+            <td>@r.Durum</td>
+            <td>
+                @if (r.Durum == DiyetisyenRandevuSistemi.Models.RandevuDurumu.Beklemede || 
+                     r.Durum == DiyetisyenRandevuSistemi.Models.RandevuDurumu.Onaylandi)
+                {
+                    <form asp-action="Cancel" method="post" style="display:inline">
+                        <input type="hidden" name="id" value="@r.Id" />
+                        <button class="btn btn-warning btn-sm">İptal</button>
+                    </form>
+                }
+
+            </td>
+        </tr>
+    }
+</table>

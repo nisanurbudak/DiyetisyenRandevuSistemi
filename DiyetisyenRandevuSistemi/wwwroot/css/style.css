@@ -1,0 +1,68 @@
+﻿/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+h1, h3 {
+    color: #1d4ed8;
+}
+
+#tanitim {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#hizmetler .card {
+    margin-bottom: 20px;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+#ekip .card {
+    margin-bottom: 20px;
+}
+
+#galeri img {
+    margin-bottom: 20px;
+}
+
+#iletisim iframe {
+    width: 100%;
+    height: 350px;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .col-md-4 {
+        margin-bottom: 20px;
+    }
+}
+
+#ekip .card {
+    margin-bottom: 30px; 
+}
+
+#ekip .col-md-4:nth-child(4),
+#ekip .col-md-4:nth-child(5) {
+    margin-top: 30px; 
+}
+
+h1.display-4 {
+    font-weight: bold;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: scale(1.03);
+    }

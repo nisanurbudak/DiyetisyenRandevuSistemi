@@ -1,0 +1,56 @@
+﻿@model IEnumerable<DiyetisyenRandevuSistemi.Models.Paket>
+
+<h2>Aboneliklerim</h2>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var paket in Model)
+    {
+                <h5>@paket.Hekim?.Adi - @(paket.Tip)</h5>
+                <p>
+            @(paket.Tip == DiyetisyenRandevuSistemi.Models.PaketTipi.Haftalik
+                        ? "Haftalık: " + paket.HaftalikGun
+                        : "Aylık: Her ayın " + paket.AylikGun + ". günü")
+                </p>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Randevu Tarihi</th>
+                            <th>Başlangıç</th>
+                            <th>Bitiş</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @if (paket.Randevular != null && paket.Randevular.Any())
+                {
+                    foreach (var randevu in paket.Randevular.OrderBy(r => r.Baslangic))
+                    {
+                                    <tr>
+                                        <td>@randevu.Baslangic.ToShortDateString()</td>
+                                        <td>@randevu.Baslangic.ToString("HH:mm")</td>
+                                        <td>@randevu.Bitis.ToString("HH:mm")</td>
+                                        <td>@randevu.Durum</td>
+                                    </tr>
+                    }
+                }
+                else
+                {
+                            <tr>
+                                <td colspan="4" class="text-center">Bu pakete ait randevu bulunamadı.</td>
+                            </tr>
+                }
+                    </tbody>
+                </table>
+
+                <form asp-action="CancelSubscription" method="post" class="mb-4">
+                    <input type="hidden" name="id" value="@paket.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm">İptal Et</button>
+                </form>
+    }
+}
+else
+{
+        <p class="text-center">Hiç aboneliğiniz bulunamadı.</p>
+}

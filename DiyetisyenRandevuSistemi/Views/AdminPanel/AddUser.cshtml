@@ -1,0 +1,30 @@
+﻿@model DiyetisyenRandevuSistemi.Models.User
+@{
+    Layout = "_AdminPanelLayout";
+    ViewData["Title"] = "Yeni Kullanıcı Ekle";
+}
+
+<h2>Yeni Kullanıcı Ekle</h2>
+
+<form asp-action="AddUser" method="post">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Ad Soyad</label>
+        <input type="text" class="form-control" id="Name" name="Name" required />
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" required />
+    </div>
+    <div class="mb-3">
+        <label for="Password" class="form-label">Şifre</label>
+        <input type="password" class="form-control" id="Password" name="Password" required />
+    </div>
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="@Url.Action("Users")" class="btn btn-secondary">Geri</a>
+</form>
+
+@if (ViewBag.ErrorMessage != null)
+{
+        <p style="color:red">@ViewBag.ErrorMessage</p>
+}
+

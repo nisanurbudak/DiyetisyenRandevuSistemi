@@ -1,0 +1,33 @@
+﻿@model DiyetisyenRandevuSistemi.Models.LoginViewModel
+
+
+<h2>Hekim Girişi</h2>
+<form method="post" asp-action="Login" asp-route-role="Hekim">
+    <div>
+        <label>Kullanıcı Adı</label>
+        <input type="text" name="Username" class="form-control" />
+    </div>
+    <div>
+        <label>Şifre</label>
+        <input type="password" name="Password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Giriş Yap</button>
+</form>
+
+<h2 class="mt-4">Admin Girişi</h2>
+<form method="post" asp-action="Login" asp-route-role="Admin">
+    <div>
+        <label>Kullanıcı Adı</label>
+        <input type="text" name="Username" class="form-control" />
+    </div>
+    <div>
+        <label>Şifre</label>
+        <input type="password" name="Password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success mt-2">Giriş Yap</button>
+</form>
+
+@if (ViewBag.ErrorMessage != null)
+{
+        <p style="color:red">@ViewBag.ErrorMessage</p>
+}

@@ -1,0 +1,89 @@
+﻿@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Takvim";
+    var groupedData = ViewBag.GroupedRandevular;
+}
+
+<h2>Takvim</h2>
+<p>Bu takvimde yalnızca onaylanmış randevularınızı görebilirsiniz.</p>
+
+<div class="calendar-grid mb-4">
+    @foreach (var date in groupedData.Keys)
+    {
+            <div class="calendar-day" data-date="@date">
+                <strong>@DateTime.Parse(date).ToString("dd.MM.yyyy")</strong>
+            </div>
+    }
+</div>
+
+<h4 id="selected-date-heading">Gün Seçiniz</h4>
+<div id="time-slots"></div>
+
+@section Scripts {
+        <script>
+            const groupedData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(groupedData));
+
+            document.querySelectorAll('.calendar-day').forEach(dayDiv => {
+                dayDiv.addEventListener('click', () => {
+                    const date = dayDiv.dataset.date;
+                    const slotsDiv = document.getElementById('time-slots');
+                    const heading = document.getElementById('selected-date-heading');
+
+                    heading.textContent = "Seçilen Gün: " + new Date(date).toLocaleDateString("tr-TR");
+
+                    let html = '<table class="table table-bordered mt-2"><tr><th>Saat</th><th>Hasta</th><th>Durum</th></tr>';
+
+                    if(groupedData[date]){
+                        groupedData[date].forEach(slot => {
+                            const start = new Date(slot.Baslangic);
+                            const end = new Date(slot.Bitis);
+
+                            html += '<tr>';
+                            html += '<td>' + start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) +
+                                    ' - ' + end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + '</td>';
+                            html += '<td>' + (slot.User?.Name ?? "Bilinmiyor") + '</td>'; // Hasta adı
+                            html += '<td>' + slot.Durum + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr><td colspan="3">Randevu yok</td></tr>';
+                    }
+
+                    html += '</table>';
+                    slotsDiv.innerHTML = html;
+
+                    // Seçilen günü renklendir
+                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected-day'));
+                    dayDiv.classList.add('selected-day');
+                });
+            });
+        </script>
+}
+
+<style>
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+
+    .calendar-day {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+        border-radius: 6px;
+        cursor: pointer;
+        background-color: #f8f9fa;
+        transition: 0.2s;
+    }
+
+    .calendar-day:hover {
+        background-color: #e2e6ea;
+    }
+
+    .selected-day {
+        background-color: #0d6efd;
+        color: white;
+        font-weight: bold;
+    }
+</style>

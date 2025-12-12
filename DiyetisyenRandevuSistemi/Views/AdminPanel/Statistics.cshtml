@@ -1,0 +1,74 @@
+﻿@using System.Text.Json
+@{
+    Layout = "_AdminPanelLayout";
+    ViewData["Title"] = "İstatistikler ve Raporlama";
+}
+
+<h2>İstatistikler ve Raporlama</h2>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h4>Toplam Kullanıcı</h4>
+            <p>@ViewBag.TotalUsers</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h4>Toplam Randevu</h4>
+            <p>@ViewBag.TotalAppointments</p>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h3>Popüler Randevu Zamanları</h3>
+<canvas id="appointmentsChart" width="400" height="150"></canvas>
+
+<h3 class="mt-5">Kullanıcı Faaliyet Raporları</h3>
+<canvas id="userActivityChart" width="400" height="150"></canvas>
+
+@section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Randevu Gün Bazlı Grafiği
+            var appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d');
+            var appointmentsChart = new Chart(appointmentsCtx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(JsonSerializer.Serialize(ViewBag.AppointmentsLabels)),
+                    datasets: [{
+                        label: 'Randevu Sayısı',
+                        data: @Html.Raw(JsonSerializer.Serialize(ViewBag.AppointmentsData)),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true }
+            });
+
+            // Kullanıcı Faaliyet Grafiği
+            var userCtx = document.getElementById('userActivityChart').getContext('2d');
+            var userActivityChart = new Chart(userCtx, {
+                type: 'pie',
+                data: {
+                    labels: @Html.Raw(JsonSerializer.Serialize(ViewBag.UserLabels)),
+                    datasets: [{
+                        label: 'Randevu Sayısı',
+                        data: @Html.Raw(JsonSerializer.Serialize(ViewBag.UserData)),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ]
+                    }]
+                },
+                options: { responsive: true }
+            });
+        </script>
+}

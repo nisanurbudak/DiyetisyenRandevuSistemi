@@ -1,0 +1,108 @@
+﻿@model IEnumerable<(DateTime Baslangic, DateTime Bitis, bool Dolu)>
+
+@{
+    var hekim = ViewBag.Hekim as DiyetisyenRandevuSistemi.Models.Diyetisyen;
+    var groupedByDay = Model.GroupBy(m => m.Baslangic.Date).ToList();
+}
+
+<h2>@hekim.Adi - Takvim</h2>
+
+<form asp-action="Subscribe" method="post" class="mb-4">
+    <input type="hidden" name="hekimId" value="@hekim.Id" />
+
+    <div class="row g-2">
+        <div class="col-md-2">
+            <select name="tip" class="form-select">
+                <option value="0">Haftalık</option>
+                <option value="1">Aylık</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="haftalikGun" class="form-select">
+                <option value="Monday">Pazartesi</option>
+                <option value="Tuesday">Salı</option>
+                <option value="Wednesday">Çarşamba</option>
+                <option value="Thursday">Perşembe</option>
+                <option value="Friday">Cuma</option>
+                <option value="Saturday">Cumartesi</option>
+                <option value="Sunday">Pazar</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" name="aylikGun" placeholder="Ayın günü (örn: 15)" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100">Abone Ol</button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    @foreach (var dayGroup in groupedByDay)
+    {
+            <div class="col-md-2 mb-3">
+                <div class="card day-card text-center" style="cursor:pointer"
+                     onclick="showSlots('@dayGroup.Key.ToString("yyyy-MM-dd")')">
+                    <div class="card-body p-3">
+                        <h5>@dayGroup.Key.ToString("dd MMM yyyy")</h5>
+                    </div>
+                </div>
+            </div>
+    }
+</div>
+
+<hr />
+
+<!-- Seçilen günün saatleri burada gösterilecek -->
+<div id="slots-container" class="mt-4"></div>
+
+@section Scripts {
+        <script>
+            var allSlots = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            groupedByDay.ToDictionary(
+          g => g.Key.ToString("yyyy-MM-dd"),
+          g => g.Select(s => new
+          {
+              baslangic = s.Baslangic.ToString("HH:mm"),
+              bitis = s.Bitis.ToString("HH:mm"),
+              tarih = s.Baslangic.ToString("yyyy-MM-dd"),
+              dolu = s.Dolu
+          })
+            )
+        ));
+
+            function showSlots(date) {
+                var container = document.getElementById("slots-container");
+                container.innerHTML = "";
+
+                if (!allSlots[date]) return;
+
+                let html = `<h4>${date} için uygun saatler</h4><div class="row">`;
+
+                allSlots[date].forEach(slot => {
+                    if (slot.dolu) {
+                        html += `
+                            <div class="col-md-3 mb-2">
+                                <div class="btn btn-secondary w-100 disabled">
+                                    ${slot.baslangic} - ${slot.bitis} (Dolu)
+                                </div>
+                            </div>`;
+                    } else {
+                        html += `
+                            <div class="col-md-3 mb-2">
+                                <a class="btn btn-success w-100"
+                                   href="/Appointments/Create?hekimId=@hekim.Id&baslangic=${slot.tarih}T${slot.baslangic}">
+                                    ${slot.baslangic} - ${slot.bitis}
+                                </a>
+                            </div>`;
+                    }
+                });
+
+                html += "</div>";
+                container.innerHTML = html;
+            }
+        </script>
+}

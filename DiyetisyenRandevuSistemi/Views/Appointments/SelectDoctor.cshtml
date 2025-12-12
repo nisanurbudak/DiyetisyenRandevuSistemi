@@ -1,0 +1,22 @@
+﻿@model List<DiyetisyenRandevuSistemi.Models.Diyetisyen>
+
+@{
+    ViewData["Title"] = "Hekim Seç";
+}
+
+<h2>Randevu Almak İçin Hekim Seçiniz</h2>
+
+<ul class="list-group">
+    @foreach (var hekim in Model)
+    {
+        <li class="list-group-item">
+            @hekim.Adi
+            <a asp-controller="Appointments"
+               asp-action="Calendar"
+               asp-route-hekimId="@hekim.Id"
+               class="btn btn-primary btn-sm float-end">
+                Takvimi Gör
+            </a>
+        </li>
+    }
+</ul>

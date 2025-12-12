@@ -1,0 +1,49 @@
+﻿@model DiyetisyenRandevuSistemi.Models.Abonelik
+@{
+    Layout = "_AdminPanelLayout";
+    ViewData["Title"] = "Yeni Randevu Ekle";
+}
+
+<h2>Yeni Randevu Ekle</h2>
+
+<form asp-action="AddAppointment" method="post">
+    <div class="mb-3">
+        <label for="UserId" class="form-label">Kullanıcı</label>
+        <select class="form-control" id="UserId" name="UserId" required>
+            <option value="">Seçiniz...</option>
+            @foreach (var user in ViewBag.Users as List<DiyetisyenRandevuSistemi.Models.User>)
+            {
+                    <option value="@user.Id">@user.Name (@user.Email)</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="HekimId" class="form-label">Hekim</label>
+        <select class="form-control" id="HekimId" name="HekimId" required>
+            <option value="">Seçiniz...</option>
+            @foreach (var hekim in ViewBag.Hekimler as List<DiyetisyenRandevuSistemi.Models.Diyetisyen>)
+            {
+                    <option value="@hekim.Id">@hekim.Adi</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Baslangic" class="form-label">Başlangıç Tarihi ve Saati</label>
+        <input type="datetime-local" class="form-control" id="Baslangic" name="Baslangic" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Bitis" class="form-label">Bitiş Tarihi ve Saati</label>
+        <input type="datetime-local" class="form-control" id="Bitis" name="Bitis" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Randevu Kaydet</button>
+    <a href="@Url.Action("Appointments")" class="btn btn-secondary">Geri</a>
+</form>
+
+@if (ViewBag.ErrorMessage != null)
+{
+        <p style="color:red">@ViewBag.ErrorMessage</p>
+}

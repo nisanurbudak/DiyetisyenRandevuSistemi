@@ -1,0 +1,20 @@
+﻿@model DiyetisyenRandevuSistemi.Models.Abonelik
+@{
+    var hekim = ViewBag.Hekim as DiyetisyenRandevuSistemi.Models.Diyetisyen;
+}
+
+<h2>Randevu Onayı</h2>
+
+<p><b>Hekim:</b> @hekim.Adi</p>
+<p><b>Tarih:</b> @Model.Baslangic.ToString("dd.MM.yyyy")</p>
+<p><b>Saat:</b> @Model.Baslangic.ToString("HH:mm") - @Model.Bitis.ToString("HH:mm")</p>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" name="HekimId" value="@hekim.Id" />
+    <input type="hidden" name="Baslangic" value="@Model.Baslangic.ToString("o")" />
+    <input type="hidden" name="Bitis" value="@Model.Bitis.ToString("o")" />
+
+    <button type="submit" class="btn btn-success">Onayla</button>
+    <a href="@Url.Action("Calendar", new { hekimId = hekim.Id })" class="btn btn-secondary">İptal</a>
+</form>
+

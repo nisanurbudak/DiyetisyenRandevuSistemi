@@ -1,0 +1,28 @@
+﻿@* Views/Home/Hekimler.cshtml *@
+@{
+    ViewData["Title"] = "Hekimlerimiz";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container py-5">
+    <h2 class="display-5 fw-bold text-primary text-center">Hekimlerimiz</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var hekim in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow rounded-4">
+                    <img src="@hekim.ResimUrl" class="card-img-top rounded-top-4" style="height: 500px; object-fit: cover;" alt="Diyetisyen Fotoğrafı">
+                    <div class="card-body">
+                        <h5 class="card-title">@hekim.Adi</h5>
+                        <p class="card-text"><strong>Uzmanlık:</strong> @hekim.Uzmanlik</p>
+                        <p class="card-text">@hekim.Aciklama</p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <a href="/Account/Login" class="btn btn-outline-primary w-100">Randevu Al</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

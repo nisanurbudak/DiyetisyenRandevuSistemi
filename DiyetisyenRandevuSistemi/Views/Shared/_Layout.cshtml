@@ -1,0 +1,118 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DiyetisyenRandevuSistemi</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DiyetisyenRandevuSistemi.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <!-- GİRİŞ YAPILDIKTAN SONRAKİ NAVBAR -->
+            <nav class="navbar navbar-expand-sm navbar-dark bg-primary box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand text-white" asp-controller="Appointments" asp-action="Create">DiyetisyenRandevuSistemi</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#authNavbar" aria-controls="authNavbar"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="authNavbar">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Appointments" asp-action="Create">Randevu Al</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Appointments" asp-action="MyAppointments">Randevularım</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Appointments" asp-action="MySubscriptions">Aboneliklerim</a>
+                            </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Appointments" asp-action="Hekimler">Hekimlerimiz</a>
+                                </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profil</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="EditProfile">Profili Düzenle</a></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item">
+                                            <button type="submit" class="btn btn-link p-0">Çıkış</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        }
+        else
+        {
+            <!-- GİRİŞ YAPILMAMIŞSA NAVBAR -->
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">DiyetisyenRandevuSistemi</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#guestNavbar"
+                            aria-controls="guestNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="guestNavbar">
+                        <!-- Sol Menü -->
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="KlinikHakkinda">Klinik Hakkında</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Hekimler">Hekimlerimiz</a>
+                            </li>
+                        </ul>
+
+                        <!-- Sağ Menü -->
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Giriş</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Login">Admin Girişi</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        }
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-4">
+        <div class="container">
+            &copy; 2025 - DiyetisyenRandevuSistemi - <a asp-controller="Home" asp-action="Privacy">Gizlilik</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

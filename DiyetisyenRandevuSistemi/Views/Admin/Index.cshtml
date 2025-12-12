@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@model List<DiyetisyenRandevuSistemi.Models.Abonelik>
+
+<h2>@Context.Session.GetString("HekimAdi") - Randevu Onay</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Hasta</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.User?.Name</td>
+                <td>@r.Baslangic.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@r.Bitis.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@r.Durum</td>
+                <td>
+                    @if (r.Durum == DiyetisyenRandevuSistemi.Models.RandevuDurumu.Beklemede)
+                    {
+                        <form method="post" asp-action="Onayla" asp-route-id="@r.Id" style="display:inline">
+                            <button type="submit" class="btn btn-success btn-sm">Onayla</button>
+                        </form>
+                        <form method="post" asp-action="Reddet" asp-route-id="@r.Id" style="display:inline">
+                            <button type="submit" class="btn btn-danger btn-sm">Reddet</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form method="post" asp-action="Logout">
+    <button type="submit" class="btn btn-secondary">Çıkış</button>
+</form>

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<DiyetisyenRandevuSistemi.Models.Diyetisyen>
+
+<h2>Hekim Seç</h2>
+<ul>
+    @foreach (var h in Model)
+    {
+        <li>
+            @h.Adi - @h.Uzmanlik
+            <a href="@Url.Action("Calendar", "Appointments", new { hekimId = h.Id })">Takvimi Gör</a>
+        </li>
+    }
+</ul>
